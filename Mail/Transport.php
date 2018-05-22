@@ -29,7 +29,6 @@ use Mageplaza\Smtp\Helper\Data;
 use Mageplaza\Smtp\Mail\Rse\Mail;
 use Mageplaza\Smtp\Model\LogFactory;
 use Magento\Framework\Mail\MessageInterface;
-use Magento\Contact\Model\ConfigInterface;
 
 /**
  * Class Transport
@@ -73,8 +72,7 @@ class Transport
         Mail $resourceMail,
         LogFactory $logFactory,
         Registry $registry,
-        Data $helper,
-        ConfigInterface $contactsConfig
+        Data $helper
     )
     {
         $this->resourceMail = $resourceMail;
@@ -101,9 +99,7 @@ class Transport
         if ($this->resourceMail->isModuleEnable($this->_storeId) && $message) {
             $message = $this->resourceMail->processMessage($message, $this->_storeId);
             /*@var $message \Magento\Framework\Mail\MessageInterface */
-
-
-            $message->setFrom($this->contactsConfig->emailSender());
+            $message->setFrom('contact@sportisgood.fr');
 
             $transport = $this->resourceMail->getTransport($this->_storeId);
             try {
