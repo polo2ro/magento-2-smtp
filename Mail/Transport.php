@@ -28,6 +28,8 @@ use Magento\Framework\Registry;
 use Mageplaza\Smtp\Helper\Data;
 use Mageplaza\Smtp\Mail\Rse\Mail;
 use Mageplaza\Smtp\Model\LogFactory;
+use Magento\Framework\Mail\MessageInterface;
+use Magento\Contact\Model\ConfigInterface;
 
 /**
  * Class Transport
@@ -71,13 +73,15 @@ class Transport
         Mail $resourceMail,
         LogFactory $logFactory,
         Registry $registry,
-        Data $helper
+        Data $helper,
+        ConfigInterface $contactsConfig
     )
     {
         $this->resourceMail = $resourceMail;
         $this->logFactory = $logFactory;
         $this->registry = $registry;
         $this->helper = $helper;
+        $this->contactsConfig = $contactsConfig;
     }
 
     /**
@@ -96,6 +100,11 @@ class Transport
         $message = $this->getMessage($subject);
         if ($this->resourceMail->isModuleEnable($this->_storeId) && $message) {
             $message = $this->resourceMail->processMessage($message, $this->_storeId);
+            /*@var $message \Magento\Framework\Mail\MessageInterface */
+
+
+            $message->setFrom($this->contactsConfig->emailSender());
+
             $transport = $this->resourceMail->getTransport($this->_storeId);
             try {
                 if (!$this->resourceMail->isDeveloperMode($this->_storeId)) {
