@@ -79,7 +79,6 @@ class Transport
         $this->logFactory = $logFactory;
         $this->registry = $registry;
         $this->helper = $helper;
-        $this->contactsConfig = $contactsConfig;
     }
 
     /**
